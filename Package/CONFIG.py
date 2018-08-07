@@ -65,8 +65,8 @@ def MAIN_ENV(args):
     ops.exportEnv(ops.setEnv("LDFLAGS", ldflags))
     ops.exportEnv(ops.setEnv("CFLAGS", cflags))
 
-    ops.exportEnv(ops.setEnv("PKG_CONFIG_LIBDIR", ops.path_join(iopc.getSdkPath(), "pkgconfig")))
-    ops.exportEnv(ops.setEnv("PKG_CONFIG_SYSROOT_DIR", iopc.getSdkPath()))
+    #ops.exportEnv(ops.setEnv("PKG_CONFIG_LIBDIR", ops.path_join(iopc.getSdkPath(), "pkgconfig")))
+    #ops.exportEnv(ops.setEnv("PKG_CONFIG_SYSROOT_DIR", iopc.getSdkPath()))
     #ops.exportEnv(ops.setEnv("LIBS", libs))
     #extra_conf.append('CFLAGS="-I' + ops.path_join(iopc.getSdkPath(), 'usr/include/libz') + '"')
 
@@ -99,6 +99,20 @@ def MAIN_CONFIGURE(args):
     extra_conf.append("--disable-update-mimedb")
     extra_conf.append("--disable-default-make-check")
     extra_conf.append("--host=" + cc_host)
+
+    cflags = ""
+    cflags += " -I" + ops.path_join(iopc.getSdkPath(), "usr/include/libxml2")
+    cflags += " -I" + ops.path_join(iopc.getSdkPath(), "usr/include/libglib/glib-2.0")
+    cflags += " -I" + ops.path_join(iopc.getSdkPath(), "usr/include/libglib/gio-unix-2.0")
+    cflags += " -I" + ops.path_join(iopc.getSdkPath(), "usr/include/libglib")
+    cflags += " -I" + ops.path_join(iopc.getSdkPath(), "usr/include/libpcre3")
+    extra_conf.append("ALL_CFLAGS=" + cflags)
+
+    libs = ""
+    libs += " -L" + ops.path_join(iopc.getSdkPath(), "lib")
+    libs += " -lxml2 -lglib-2.0"
+    extra_conf.append("ALL_LIBS=" + libs)
+
     print extra_conf
     iopc.configure(tarball_dir, extra_conf)
 
